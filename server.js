@@ -24,12 +24,12 @@ const offerConfig = {
     e4Amt: 0, e4Balance: false, e4Comment: 'Deposit',
     referAmt: 50
   },
-  'NewOffer': {
-    e1Amt: 0, e1Balance: false, e1Comment: 'Install',
-    e2Amt: 150, e2Balance: true, e2Comment: 'Trial',
+  'Digi Credit': {
+    e1Amt: 5, e1Balance: false, e1Comment: 'Register',
+    e2Amt: 0, e2Balance: true, e2Comment: 'Trial',
     e3Amt: 0, e3Balance: false, e3Comment: 'KYC',
     e4Amt: 0, e4Balance: false, e4Comment: 'Deposit',
-    referAmt: 30
+    referAmt: 10
   }
 };
 
