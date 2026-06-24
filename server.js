@@ -35,7 +35,7 @@ const offerConfig = {
 
 const landingUrls = {
   'Coinswitch': 'https://coinswitch-rho.vercel.app',
-  'NewOffer': 'https://cashflix.site'
+  'NewOffer': 'https://coinswitch-rho.vercel.app'
 };
 
 const rateLimitMap = {};
