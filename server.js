@@ -17,10 +17,10 @@ const SUPABASE_KEY = process.env.SUPABASE_KEY;
 const POSTBACK_TOKEN = process.env.POSTBACK_TOKEN || 'cashflix_secure_2026';
 
 const offerConfig = {
-  'Coinswitch': {
+  'JigriSuper': {
     e1Amt: 0, e1Balance: false, e1Comment: 'Install',
-    e2Amt: 200, e2Balance: true, e2Comment: 'Trial',
-    e3Amt: 0, e3Balance: false, e3Comment: 'KYC',
+    e2Amt: 0, e2Balance: true, e2Comment: 'Register',
+    e3Amt: 50, e3Balance: false, e3Comment: 'Purchase',
     e4Amt: 0, e4Balance: false, e4Comment: 'Deposit',
     referAmt: 50
   },
@@ -34,7 +34,7 @@ const offerConfig = {
 };
 
 const landingUrls = {
-  'Coinswitch': 'https://coinswitch-rho.vercel.app',
+  'JigriSuper': 'https://coinswitch-rho.vercel.app',
   'DigiCredit': 'https://coinswitch-rho.vercel.app'
 };
 
@@ -85,8 +85,8 @@ function generateReferCode() {
 
 function getEventConfig(config, eventName) {
   const e1Events = ['web', 'initial', 'install', 'e1', 'default'];
-  const e2Events = ['trial', 'purchase', 'e2', 'complete', 'signup', 'goldbuy', 'sign_up_success', 'af_complete_registration', 'gold_silver_successful_purchase'];
-  const e3Events = ['e3', 'step3', 'kyc', 'verify'];
+  const e2Events = ['trial', 'h', 'e2', 'complete', 'signup', 'goldbuy', 'sign_up_success', 'af_complete_registration', 'gold_silver_successful_purchase'];
+  const e3Events = ['e3', 'step3', 'kyc', 'Purchase'];
   const e4Events = ['e4', 'step4', 'deposit', 'buy', 'trade'];
 
   if (e1Events.includes(eventName)) return { amt: config.e1Amt, balance: config.e1Balance, comment: config.e1Comment, type: 'install' };
