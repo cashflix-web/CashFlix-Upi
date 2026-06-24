@@ -18,16 +18,24 @@ const POSTBACK_TOKEN = process.env.POSTBACK_TOKEN || 'cashflix_secure_2026';
 
 const offerConfig = {
   'Coinswitch': {
-    e1Amt: 0, e1Balance: false, e1Comment: 'Coinswitch Install',
-    e2Amt: 200, e2Balance: true, e2Comment: 'Coinswitch Trial',
-    e3Amt: 0, e3Balance: false, e3Comment: 'Coinswitch Step 3',
-    e4Amt: 0, e4Balance: false, e4Comment: 'Coinswitch Step 4',
+    e1Amt: 0, e1Balance: false, e1Comment: 'Install',
+    e2Amt: 200, e2Balance: true, e2Comment: 'Trial',
+    e3Amt: 0, e3Balance: false, e3Comment: 'KYC',
+    e4Amt: 0, e4Balance: false, e4Comment: 'Deposit',
     referAmt: 50
+  },
+  'NewOffer': {
+    e1Amt: 0, e1Balance: false, e1Comment: 'Install',
+    e2Amt: 150, e2Balance: true, e2Comment: 'Trial',
+    e3Amt: 0, e3Balance: false, e3Comment: 'KYC',
+    e4Amt: 0, e4Balance: false, e4Comment: 'Deposit',
+    referAmt: 30
   }
 };
 
 const landingUrls = {
-  'Coinswitch': 'https://coinswitch-rho.vercel.app'
+  'Coinswitch': 'https://coinswitch-rho.vercel.app',
+  'NewOffer': 'https://newoffer-landing.vercel.app'
 };
 
 const rateLimitMap = {};
@@ -81,10 +89,10 @@ function getEventConfig(config, eventName) {
   const e3Events = ['e3', 'step3', 'kyc', 'verify'];
   const e4Events = ['e4', 'step4', 'deposit', 'buy', 'trade'];
 
-  if (e1Events.includes(eventName)) return { amt: config.e1Amt, balance: config.e1Balance, comment: config.e1Comment, type: 'install', label: 'Install' };
-  if (e2Events.includes(eventName)) return { amt: config.e2Amt, balance: config.e2Balance, comment: config.e2Comment, type: 'trial', label: 'Trial' };
-  if (e3Events.includes(eventName)) return { amt: config.e3Amt, balance: config.e3Balance, comment: config.e3Comment, type: 'e3', label: 'KYC' };
-  if (e4Events.includes(eventName)) return { amt: config.e4Amt, balance: config.e4Balance, comment: config.e4Comment, type: 'e4', label: 'Deposit' };
+  if (e1Events.includes(eventName)) return { amt: config.e1Amt, balance: config.e1Balance, comment: config.e1Comment, type: 'install' };
+  if (e2Events.includes(eventName)) return { amt: config.e2Amt, balance: config.e2Balance, comment: config.e2Comment, type: 'trial' };
+  if (e3Events.includes(eventName)) return { amt: config.e3Amt, balance: config.e3Balance, comment: config.e3Comment, type: 'e3' };
+  if (e4Events.includes(eventName)) return { amt: config.e4Amt, balance: config.e4Balance, comment: config.e4Comment, type: 'e4' };
   return null;
 }
 
@@ -246,11 +254,11 @@ app.get('/offer-status', async (req, res) => {
   }
 });
 
-// ✅ Admin chart endpoint — same row mein user + refer details
+// ✅ Admin chart endpoint
 app.get('/admin/conversions', async (req, res) => {
   try {
     const { token } = req.query;
-    if (token !== POSTBACK_TOKEN) return res.status(403).json({ success: false, error: 'Forbidden' });
+    if (token !== POSTBACK_TOKEN) return res.status(403).json({ success: false });
 
     const conversions = await dbGet('upi_conversions', `order=created_at.desc&limit=200`);
 
@@ -306,10 +314,10 @@ app.get('/postback', async (req, res) => {
     } catch(e) {}
 
     const config = offerConfig[offer] || {
-      e1Amt: 0, e1Balance: false, e1Comment: `${offer} Install`,
-      e2Amt: 0, e2Balance: false, e2Comment: `${offer} Trial`,
-      e3Amt: 0, e3Balance: false, e3Comment: `${offer} Step 3`,
-      e4Amt: 0, e4Balance: false, e4Comment: `${offer} Step 4`,
+      e1Amt: 0, e1Balance: false, e1Comment: 'Install',
+      e2Amt: 0, e2Balance: false, e2Comment: 'Trial',
+      e3Amt: 0, e3Balance: false, e3Comment: 'KYC',
+      e4Amt: 0, e4Balance: false, e4Comment: 'Deposit',
       referAmt: 0
     };
 
@@ -322,16 +330,16 @@ app.get('/postback', async (req, res) => {
       return res.send('OK');
     }
 
-    // ✅ Install event
+    // ✅ Install event — Confirmation format
     if (eventConfig.type === 'install') {
       await dbPost('upi_conversions', { upi_id: click_id, offer_name: offer, event, amount: 0, status: 'tracked' });
 
-      const msg = `<b>Conversation Count 💝</b>\n\n<b>🎁 Offer Name - ${offer}</b>\n\n<b>User Id : ${maskUPI(click_id)}</b>\n<b>🥳 Event : ${eventConfig.label} ✅</b>\n\n<b>Run Time - ${runTime}</b>\n<b>Track Time - ${trackTime}</b>\n\n<b>Powered By - CashFlix</b>`;
+      const msg = `<b>Confirmation Conversation Count 💝</b>\n\n<b>🎁 Offer Name - ${offer}</b>\n\n<b>User Id : ${maskUPI(click_id)}</b>\n<b>🥳 ${eventConfig.comment} : Success</b>\n\n<b>Run Time - ${runTime}</b>\n<b>Track Time - ${trackTime}</b>\n\n<b>Powered By - CashFlix</b>`;
       await sendMsg(CHAT_ID, msg);
       return res.send('OK');
     }
 
-    // ✅ Trial/e3/e4 — payout, same row mein user + refer dono
+    // ✅ Trial/e3/e4 — payout format (event nahi dikhega)
     let amt = user_payout_custom || eventConfig.amt || 0;
     let referAmt = my_payout_custom || config.referAmt || 0;
 
@@ -350,7 +358,6 @@ app.get('/postback', async (req, res) => {
       }
     }
 
-    // ✅ Ek hi row mein sab save karo
     await dbPost('upi_conversions', {
       upi_id: click_id,
       offer_name: offer,
@@ -361,7 +368,8 @@ app.get('/postback', async (req, res) => {
       refer_amount: referAmtPaid
     });
 
-    const msg = `<b>Conversation Count 💝</b>\n\n<b>🎁 Offer Name - ${offer}</b>\n\n<b>User Id : ${maskUPI(click_id)}</b>\n<b>User Amount : ₹${amt}</b>\n<b>🥳 Event : ${eventConfig.label} ✅</b>\n<b>🥳 User Payment : Success</b>\n\n<b>Refer Id : ${maskUPI(referUpi || 'N/A')}</b>\n<b>Refer Amount : ₹${referAmtPaid}</b>\n<b>🥳 Refer Payment : Success</b>\n\n<b>Run Time - ${runTime}</b>\n<b>Track Time - ${trackTime}</b>\n\n<b>Powered By - CashFlix</b>`;
+    // ✅ Payout message — event nahi, sirf amount aur payment
+    const msg = `<b>Conversation Count 💝</b>\n\n<b>🎁 Offer Name - ${offer}</b>\n\n<b>User Id : ${maskUPI(click_id)}</b>\n<b>User Amount : ₹${amt}</b>\n<b>🥳 User Payment : Success</b>\n\n<b>Refer Id : ${maskUPI(referUpi || 'N/A')}</b>\n<b>Refer Amount : ₹${referAmtPaid}</b>\n<b>🥳 Refer Payment : Success</b>\n\n<b>Run Time - ${runTime}</b>\n<b>Track Time - ${trackTime}</b>\n\n<b>Powered By - CashFlix</b>`;
     await sendMsg(CHAT_ID, msg);
 
   } catch(e) {
