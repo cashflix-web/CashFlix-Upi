@@ -35,7 +35,7 @@ const offerConfig = {
 
 const landingUrls = {
   'Coinswitch': 'https://jigrisupp.cashflix.site',
-  'JigriSuper': 'https://jigrisupp.cashflix.site'
+  'JigriSuper': 'https://jigrisupp.cashflix.site',
 };
 
 const rateLimitMap = {};
