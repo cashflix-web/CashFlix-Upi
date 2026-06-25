@@ -19,7 +19,7 @@ const POSTBACK_TOKEN = process.env.POSTBACK_TOKEN || 'Harsh@123';
 const offerConfig = {
   'AngleOne': {
     e1Amt: 0, e1Balance: false, e1Comment: 'Install',
-    e2Amt: 200, e2Balance: true, e2Comment: 'Acc Open',
+    e2Amt: 200, e2Balance: true, e2Comment: 'Account Open',
     e3Amt: 0, e3Balance: false, e3Comment: 'KYC',
     e4Amt: 0, e4Balance: false, e4Comment: 'Deposit',
     referAmt: 300
@@ -85,7 +85,7 @@ function generateReferCode() {
 
 function getEventConfig(config, eventName) {
   const e1Events = ['web', 'initial', 'install', 'e1', 'default'];
-  const e2Events = ['trial', 'purchase', 'e2', 'complete', 'signup', 'goldbuy', 'sign_up_success', 'af_complete_registration', 'gold_silver_successful_purchase'];
+  const e2Events = ['trial', 'purchase', 'e2', 'complete', 'signup', 'Account_Open', 'sign_up_success', 'af_complete_registration', 'gold_silver_successful_purchase'];
   const e3Events = ['e3', 'step3', 'kyc', 'verify'];
   const e4Events = ['e4', 'step4', 'deposit', 'buy', 'trade'];
 
