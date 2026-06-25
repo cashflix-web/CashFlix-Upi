@@ -17,25 +17,25 @@ const SUPABASE_KEY = process.env.SUPABASE_KEY;
 const POSTBACK_TOKEN = process.env.POSTBACK_TOKEN || 'cashflix_secure_2026';
 
 const offerConfig = {
-  'JigriSuper': {
+  'Coinswitch': {
     e1Amt: 0, e1Balance: false, e1Comment: 'Install',
-    e2Amt: 50, e2Balance: true, e2Comment: 'Purchase',
-    e3Amt: 0, e3Balance: false, e3Comment: 'Purchase',
+    e2Amt: 200, e2Balance: true, e2Comment: 'Trial',
+    e3Amt: 0, e3Balance: false, e3Comment: 'KYC',
     e4Amt: 0, e4Balance: false, e4Comment: 'Deposit',
     referAmt: 50
   },
-  'DigiCredit': {
-    e1Amt: 5, e1Balance: false, e1Comment: 'Register',
-    e2Amt: 0, e2Balance: true, e2Comment: 'Trial',
+  'JigriSuper': {
+    e1Amt: 0, e1Balance: false, e1Comment: 'Install',
+    e2Amt: 50, e2Balance: true, e2Comment: 'Purchase',
     e3Amt: 0, e3Balance: false, e3Comment: 'KYC',
     e4Amt: 0, e4Balance: false, e4Comment: 'Deposit',
-    referAmt: 10
+    referAmt: 50
   }
 };
 
 const landingUrls = {
-  'JigriSuper': 'https://coinswitch-rho.vercel.app',
-  'DigiCredit': 'https://coinswitch-rho.vercel.app'
+  'Coinswitch': 'https://coinswitch-rho.vercel.app',
+  'JigriSuper': 'https://coinswitch-rho.vercel.app'
 };
 
 const rateLimitMap = {};
@@ -85,8 +85,8 @@ function generateReferCode() {
 
 function getEventConfig(config, eventName) {
   const e1Events = ['web', 'initial', 'install', 'e1', 'default'];
-  const e2Events = ['trial', 'h', 'e2', 'complete', 'signup', 'Purchase', 'sign_up_success', 'af_complete_registration', 'gold_silver_successful_purchase'];
-  const e3Events = ['e3', 'step3', 'kyc', 'Purchase'];
+  const e2Events = ['trial', 'purchase', 'e2', 'complete', 'signup', 'goldbuy', 'sign_up_success', 'af_complete_registration', 'gold_silver_successful_purchase'];
+  const e3Events = ['e3', 'step3', 'kyc', 'verify'];
   const e4Events = ['e4', 'step4', 'deposit', 'buy', 'trade'];
 
   if (e1Events.includes(eventName)) return { amt: config.e1Amt, balance: config.e1Balance, comment: config.e1Comment, type: 'install' };
@@ -254,23 +254,32 @@ app.get('/offer-status', async (req, res) => {
   }
 });
 
-// ✅ Admin chart endpoint
+// ✅ Admin chart endpoint — full UPI, no masking
 app.get('/admin/conversions', async (req, res) => {
   try {
     const { token } = req.query;
     if (token !== POSTBACK_TOKEN) return res.status(403).json({ success: false });
 
     const conversions = await dbGet('upi_conversions', `order=created_at.desc&limit=200`);
+    const clicks = await dbGet('clicks', `order=created_at.desc&limit=500`);
+
+    // ✅ clicks table se refer_by match karo
+    const clickMap = {};
+    clicks.forEach(c => {
+      if (c.referred_by) clickMap[c.click_id] = c.referred_by;
+    });
 
     res.json({
       success: true,
       conversions: conversions.map(c => ({
         offer_name: c.offer_name,
         event: c.event,
-        upi_id: maskUPI(c.upi_id),
+        upi_id: c.upi_id, // ✅ Full UPI — no masking
         amount: c.amount,
         status: c.status,
-        refer_upi: c.refer_upi ? maskUPI(c.refer_upi) : null,
+        refer_upi: c.refer_upi
+          ? c.refer_upi // ✅ Full refer UPI — no masking
+          : (clickMap[c.upi_id] ? clickMap[c.upi_id] : null),
         refer_amount: c.refer_amount || 0,
         time: c.created_at
       }))
@@ -330,16 +339,24 @@ app.get('/postback', async (req, res) => {
       return res.send('OK');
     }
 
-    // ✅ Install event — Confirmation format
+    // ✅ Install event
     if (eventConfig.type === 'install') {
-      await dbPost('upi_conversions', { upi_id: click_id, offer_name: offer, event, amount: 0, status: 'tracked' });
+      await dbPost('upi_conversions', {
+        upi_id: click_id,
+        offer_name: offer,
+        event,
+        amount: 0,
+        status: 'tracked',
+        refer_upi: referred_by || null,
+        refer_amount: 0
+      });
 
       const msg = `<b>Confirmation Conversation Count 💝</b>\n\n<b>🎁 Offer Name - ${offer}</b>\n\n<b>User Id : ${maskUPI(click_id)}</b>\n<b>🥳 ${eventConfig.comment} : Success</b>\n\n<b>Run Time - ${runTime}</b>\n<b>Track Time - ${trackTime}</b>\n\n<b>Powered By - CashFlix</b>`;
       await sendMsg(CHAT_ID, msg);
       return res.send('OK');
     }
 
-    // ✅ Trial/e3/e4 — payout format (event nahi dikhega)
+    // ✅ Trial/e3/e4 — payout
     let amt = user_payout_custom || eventConfig.amt || 0;
     let referAmt = my_payout_custom || config.referAmt || 0;
 
@@ -368,7 +385,6 @@ app.get('/postback', async (req, res) => {
       refer_amount: referAmtPaid
     });
 
-    // ✅ Payout message — event nahi, sirf amount aur payment
     const msg = `<b>Conversation Count 💝</b>\n\n<b>🎁 Offer Name - ${offer}</b>\n\n<b>User Id : ${maskUPI(click_id)}</b>\n<b>User Amount : ₹${amt}</b>\n<b>🥳 User Payment : Success</b>\n\n<b>Refer Id : ${maskUPI(referUpi || 'N/A')}</b>\n<b>Refer Amount : ₹${referAmtPaid}</b>\n<b>🥳 Refer Payment : Success</b>\n\n<b>Run Time - ${runTime}</b>\n<b>Track Time - ${trackTime}</b>\n\n<b>Powered By - CashFlix</b>`;
     await sendMsg(CHAT_ID, msg);
 
