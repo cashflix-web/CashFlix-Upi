@@ -34,8 +34,8 @@ const offerConfig = {
 };
 
 const landingUrls = {
-  'Coinswitch': 'https://coinswitch-rho.vercel.app',
-  'JigriSuper': 'https://coinswitch-rho.vercel.app'
+  'Coinswitch': 'https://jigrisupp.cashflix.site',
+  'JigriSuper': 'https://jigrisupp.cashflix.site'
 };
 
 const rateLimitMap = {};
