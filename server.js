@@ -17,12 +17,12 @@ const SUPABASE_KEY = process.env.SUPABASE_KEY;
 const POSTBACK_TOKEN = process.env.POSTBACK_TOKEN || 'Harsh@123';
 
 const offerConfig = {
-  'Coinswitch': {
+  'AngleOne': {
     e1Amt: 0, e1Balance: false, e1Comment: 'Install',
-    e2Amt: 200, e2Balance: true, e2Comment: 'Trial',
+    e2Amt: 200, e2Balance: true, e2Comment: 'Acc Open',
     e3Amt: 0, e3Balance: false, e3Comment: 'KYC',
     e4Amt: 0, e4Balance: false, e4Comment: 'Deposit',
-    referAmt: 50
+    referAmt: 300
   },
   'JigriSuper': {
     e1Amt: 0, e1Balance: false, e1Comment: 'Install',
@@ -34,7 +34,7 @@ const offerConfig = {
 };
 
 const landingUrls = {
-  'Coinswitch': 'https://jigrisupp.cashflix.site',
+  'AngleOne': 'https://jigrisupp.cashflix.site',
   'JigriSuper': 'https://jigrisupp.cashflix.site',
 };
 
