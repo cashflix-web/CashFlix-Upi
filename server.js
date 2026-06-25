@@ -14,7 +14,7 @@ const BOT_TOKEN = process.env.BOT_TOKEN;
 const CHAT_ID = process.env.CHAT_ID;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
-const POSTBACK_TOKEN = process.env.POSTBACK_TOKEN || 'cashflix_secure_2026';
+const POSTBACK_TOKEN = process.env.POSTBACK_TOKEN || 'Harsh@123';
 
 const offerConfig = {
   'Coinswitch': {
