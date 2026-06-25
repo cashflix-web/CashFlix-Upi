@@ -34,7 +34,7 @@ const offerConfig = {
 };
 
 const landingUrls = {
-  'AngleOne': 'https://jigrisupp.cashflix.site',
+  'AngleOne': 'https://angleone.cashflix.site',
   'JigriSuper': 'https://jigrisupp.cashflix.site',
 };
 
