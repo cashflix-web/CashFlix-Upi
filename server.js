@@ -35,7 +35,7 @@ const offerConfig = {
 
 const landingUrls = {
   'AngleOne': 'https://offers.cashflix.site/Offer/PolicyBazar',
-  'JigriSuper': 'https://jigrisupp.cashflix.site',
+  'PB': 'https://offers.cashflix.site/Offer/pbcy',
 };
 
 const rateLimitMap = {};
