@@ -24,12 +24,12 @@ const offerConfig = {
     e4Amt: 0, e4Balance: false, e4Comment: 'Deposit',
     referAmt: 300
   },
-  'JigriSuper': {
+  'PB': {
     e1Amt: 0, e1Balance: false, e1Comment: 'Install',
-    e2Amt: 50, e2Balance: true, e2Comment: 'Purchase',
+    e2Amt: 6, e2Balance: true, e2Comment: 'Register',
     e3Amt: 0, e3Balance: false, e3Comment: 'KYC',
     e4Amt: 0, e4Balance: false, e4Comment: 'Deposit',
-    referAmt: 50
+    referAmt: 6
   }
 };
 
