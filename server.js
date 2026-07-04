@@ -24,7 +24,7 @@ const offerConfig = {
     e4Amt: 0, e4Balance: false, e4Comment: 'Deposit',
     referAmt: 300
   },
-  'PB': {
+  'Coinswitch': {
     e1Amt: 0, e1Balance: false, e1Comment: 'Install',
     e2Amt: 6, e2Balance: true, e2Comment: 'Register',
     e3Amt: 0, e3Balance: false, e3Comment: 'KYC',
@@ -35,7 +35,7 @@ const offerConfig = {
 
 const landingUrls = {
   'AngleOne': 'https://offers.cashflix.site/Offer/PolicyBazar',
-  'PB': 'https://offers.cashflix.site/Offer/pbcy',
+  'Coinswitch': 'https://offers.cashflix.site/offer/Coinswitch',
 };
 
 const rateLimitMap = {};
