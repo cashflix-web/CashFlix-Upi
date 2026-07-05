@@ -17,12 +17,12 @@ const SUPABASE_KEY = process.env.SUPABASE_KEY;
 const POSTBACK_TOKEN = process.env.POSTBACK_TOKEN || 'Harsh@123';
 
 const offerConfig = {
-  'AngleOne': {
+  'Nielsen': {
     e1Amt: 0, e1Balance: false, e1Comment: 'Install',
-    e2Amt: 200, e2Balance: true, e2Comment: 'Account Open',
+    e2Amt: 60, e2Balance: true, e2Comment: '3 Day Open',
     e3Amt: 0, e3Balance: false, e3Comment: 'KYC',
     e4Amt: 0, e4Balance: false, e4Comment: 'Deposit',
-    referAmt: 300
+    referAmt: 100
   },
   'Coinswitch': {
     e1Amt: 0, e1Balance: false, e1Comment: 'Install',
@@ -34,7 +34,7 @@ const offerConfig = {
 };
 
 const landingUrls = {
-  'AngleOne': 'https://offers.cashflix.site/Offer/PolicyBazar',
+  'Nielsen': 'https://offers.cashflix.site/offer/Nielsen',
   'Coinswitch': 'https://offers.cashflix.site/offer/Coinswitch',
 };
 
@@ -85,7 +85,7 @@ function generateReferCode() {
 
 function getEventConfig(config, eventName) {
   const e1Events = ['web', 'initial', 'install', 'e1', 'default'];
-  const e2Events = ['trial', 'purchase', 'e2', 'complete', 'signup', 'Account_Open', 'sign_up_success', 'af_complete_registration', 'gold_silver_successful_purchase'];
+  const e2Events = ['trial', 'purchase', 'e2', 'Retetion', 'signup', 'Account_Open', 'sign_up_success', 'af_complete_registration', 'gold_silver_successful_purchase'];
   const e3Events = ['e3', 'step3', 'kyc', 'verify'];
   const e4Events = ['e4', 'step4', 'deposit', 'buy', 'trade'];
 
