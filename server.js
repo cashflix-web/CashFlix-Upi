@@ -17,9 +17,9 @@ const SUPABASE_KEY = process.env.SUPABASE_KEY;
 const POSTBACK_TOKEN = process.env.POSTBACK_TOKEN || 'Harsh@123';
 
 const offerConfig = {
-  'Nieslen': {
+  'PolicyBazar': {
     e1Amt: 0, e1Balance: false, e1Comment: 'Install',
-    e2Amt: 60, e2Balance: true, e2Comment: '3 Day Open',
+    e2Amt: 5, e2Balance: true, e2Comment: 'Register',
     e3Amt: 0, e3Balance: false, e3Comment: 'KYC',
     e4Amt: 0, e4Balance: false, e4Comment: 'Deposit',
     referAmt: 100
@@ -34,7 +34,7 @@ const offerConfig = {
 };
 
 const landingUrls = {
-  'Nieslen': 'https://offers.cashflix.site/offer/Nieslen',
+  'PolicyBazar': 'https://offers.cashflix.site/offer/',
   'Coinswitch': 'https://offers.cashflix.site/offer/Coinswitch',
 };
 
