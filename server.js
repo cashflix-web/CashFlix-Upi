@@ -34,7 +34,7 @@ const offerConfig = {
 };
 
 const landingUrls = {
-  'PolicyBazar': 'https://offers.cashflix.site/offer/',
+  'PolicyBazar': 'https://offers.cashflix.site/offer/plcybzr',
   'Coinswitch': 'https://offers.cashflix.site/offer/Coinswitch',
 };
 
