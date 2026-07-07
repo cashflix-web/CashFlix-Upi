@@ -34,8 +34,8 @@ const offerConfig = {
 };
 
 const landingUrls = {
+  'PolnicyBazar': 'https://offers.cashflix.site/offer/plcybzr',
   'PolicyBazar': 'https://offers.cashflix.site/offer/plcybzr',
-  'Coinswitch': 'https://offers.cashflix.site/offer/Coinswitch',
 };
 
 const rateLimitMap = {};
