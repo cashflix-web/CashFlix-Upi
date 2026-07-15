@@ -34,7 +34,7 @@ const offerConfig = {
 };
 
 const landingUrls = {
-  'Nielsen': 'https://offers.cashflix.site/offer/plcybzr',
+  'Nielsen': 'https://offers.cashflix.site/offer/Neilsn',
   'PolicyBazar': 'https://offers.cashflix.site/offer/plcybzr',
 };
 
