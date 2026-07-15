@@ -17,9 +17,9 @@ const SUPABASE_KEY = process.env.SUPABASE_KEY;
 const POSTBACK_TOKEN = process.env.POSTBACK_TOKEN || 'Harsh@123';
 
 const offerConfig = {
-  'PolicyBazar': {
+  'Nielsen': {
     e1Amt: 0, e1Balance: false, e1Comment: 'Install',
-    e2Amt: 5, e2Balance: true, e2Comment: 'Register',
+    e2Amt: 100, e2Balance: true, e2Comment: '1 Day Active',
     e3Amt: 0, e3Balance: false, e3Comment: 'KYC',
     e4Amt: 0, e4Balance: false, e4Comment: 'Deposit',
     referAmt: 100
@@ -34,7 +34,7 @@ const offerConfig = {
 };
 
 const landingUrls = {
-  'PolnicyBazar': 'https://offers.cashflix.site/offer/plcybzr',
+  'Nielsen': 'https://offers.cashflix.site/offer/plcybzr',
   'PolicyBazar': 'https://offers.cashflix.site/offer/plcybzr',
 };
 
